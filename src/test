@@ -1,0 +1,40 @@
+import os
+
+# Define the base directory and other components
+user_docs = "user_docs"
+username = "dataropes"
+bot_id = "7"
+
+# Construct the file path using os.path.join
+directory_path = os.path.join(user_docs, username, bot_id)
+
+# Function to list PDF files in the directory
+def list_pdf_files(directory_path):
+    # Check if the directory exists
+    if not os.path.isdir(directory_path):
+        print(f"The provided path is not a valid directory: {directory_path}")
+        return []
+
+    # List all files in the directory
+    files = [f for f in os.listdir(directory_path) if os.path.isfile(os.path.join(directory_path, f))]
+
+    # Filter files with .pdf extension
+    pdf_files = [f for f in files if f.lower().endswith(".pdf")]
+
+    if not pdf_files:
+        print(f"No PDF files found in the directory: {directory_path}")
+        return []
+
+    print(f"Found {len(pdf_files)} PDF files in the directory: {directory_path}")
+    for i, pdf_file in enumerate(pdf_files, start=1):
+        print(f"{i}. {pdf_file}")
+
+    return pdf_files
+
+# Example usage
+if __name__ == "__main__":
+    pdf_files = list_pdf_files(directory_path)
+    if pdf_files:
+        print("\nPDF Files:")
+        for pdf_file in pdf_files:
+            print(pdf_file)
