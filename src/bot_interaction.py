@@ -12,11 +12,14 @@ from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_redis import RedisChatMessageHistory
 from langchain_chroma import Chroma
-from langchain.schema import Document
 from logger import setup_logger
 
+# Load environment variables first
 load_dotenv()
 logger = setup_logger()
+
+from langchain.callbacks.tracers import LangChainTracer
+langsmith_tracer = LangChainTracer()
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 logger.info(f"Connecting to Redis at: {REDIS_URL}")
@@ -33,9 +36,9 @@ embeddings = GoogleGenerativeAIEmbeddings(
     task_type="retrieval_document",
 )
 
-def get_relevant_documents_from_chroma(user_input: str, bot_id: int, username: str):
+def get_relevant_documents_from_chroma(user_input: str, bot_name: str, username: str):
     try:
-        directory_path = os.path.join("user_docs", username, str(bot_id))
+        directory_path = os.path.join("user_docs", username, str(bot_name))
         if not os.path.isdir(directory_path):
             logger.warning(f"Invalid directory: {directory_path}")
             return [], username
@@ -75,9 +78,9 @@ def get_relevant_documents_from_chroma(user_input: str, bot_id: int, username: s
         logger.error(f"Error retrieving documents: {e}")
         return [], username
 
-def build_system_prompt(company_name: str, domain: str, industry: str, bot_behavior: str) -> str:
+def build_system_prompt(bot_name: str, company_name: str, domain: str, industry: str, bot_behavior: str) -> str:
     return f"""**Company Identity**
-    You are an AI representative of {company_name}, operating in the {industry} industry with a focus on {domain}. 
+    Your name is {bot_name} and You are an AI representative of {company_name}, operating in the {industry} industry with a focus on {domain}. 
 
     **Core Behavior Guidelines**
     1. Adhere strictly to this persona: {bot_behavior}
@@ -103,6 +106,7 @@ def get_redis_history(session_id: str) -> BaseChatMessageHistory:
     return RedisChatMessageHistory(session_id, redis_url=REDIS_URL)
 
 def get_bot_response(
+    bot_name: str,
     company_name: str,
     domain: str,
     industry: str,
@@ -110,15 +114,15 @@ def get_bot_response(
     user_input: str,
     session_id: str,
     bot_id: int,
-    username: str  # Added username parameter
+    username: str
 ) -> str:
     try:
         logger.info(f"Processing request for {username} (bot {bot_id})")
 
-        relevant_documents, username = get_relevant_documents_from_chroma(user_input, bot_id, username)
+        relevant_documents, username = get_relevant_documents_from_chroma(user_input, bot_name, username)
         context = "\n".join(relevant_documents) if relevant_documents else "No additional context available"
 
-        system_prompt = build_system_prompt(company_name, domain, industry, bot_behavior)
+        system_prompt = build_system_prompt(bot_name, company_name, domain, industry, bot_behavior)
         system_prompt += f"\n\nRelevant Context:\n{context}"
 
         prompt = ChatPromptTemplate.from_messages([
@@ -138,7 +142,7 @@ def get_bot_response(
 
         result = chain_with_history.invoke(
             {"input": user_input},
-            config={"configurable": {"session_id": session_id}},
+            config={"configurable": {"session_id": session_id}}
         )
 
         logger.info(f"Successfully generated response for {username}")

@@ -19,15 +19,16 @@ def create_chatbot(username, data, files):
     try:
         # Create initial chatbot record
         c.execute('''INSERT INTO chatbots 
-                    (username, company_name, domain, industry, system_prompt, documents, created_at)
-                    VALUES (?,?,?,?,?,?,?)''',
-                (username, data['company_name'], data['domain'], data['industry'],
+                    (username, bot_name, company_name, domain, industry, system_prompt, documents, created_at)
+                    VALUES (?,?,?,?,?,?,?,?)''',
+                (username, data['bot_name'], data['company_name'], data['domain'], data['industry'],
                 data['system_prompt'], '', datetime.now()))
         bot_id = c.lastrowid
+        bot_name = data['bot_name']
         logger.info(f"Created base chatbot record with ID: {bot_id}")
 
         # Create document directory structure
-        bot_dir = os.path.join('user_docs', username, str(bot_id))
+        bot_dir = os.path.join('user_docs', username, str(bot_name))
         os.makedirs(bot_dir, exist_ok=True)
         logger.info(f"Created document directory: {bot_dir}")
 
