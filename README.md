@@ -86,8 +86,7 @@ chatbridge/
     LANGSMITH_ENDPOINT=''
     ```
 
-## Running the Application
-
+6. **Running the Application**
     ```sh
     streamlit run src/app.py
     ```
