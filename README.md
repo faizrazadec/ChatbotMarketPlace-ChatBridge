@@ -2,6 +2,12 @@
 
 **ChatBridge** is an AI-powered chatbot creation platform that enables users to easily design, deploy, and manage custom chatbots. With advanced retrieval-augmented generation (RAG) capabilities, document embedding, and seamless website integration via an embed script, ChatBridge provides a comprehensive solution for businesses and developers looking to enhance customer engagement.
 
+## Demo Video 🎥
+
+<p align="center">
+  <iframe width="800" height="450" src="data/Demo Video.mp4" frameborder="0" allowfullscreen></iframe>
+</p>
+
 ## Features
 
 - **User Authentication:** Secure sign-up and login with email validation.
@@ -53,8 +59,8 @@ chatbridge/
 
 1. **Clone the repository**
     ```sh
-   git clone https://github.com/faizrazadec/ChatBridge-AI.git
-   cd ChatBridge-A
+   git clone https://github.com/faizrazadec/chatbot_market_place.git
+   cd chatbot_market_place
    ```
 
 2. **Create a virtual environment**
@@ -96,3 +102,5 @@ chatbridge/
 
 - **Chat Dashboard:**
     Select a chatbot from the sidebar to view its conversation history, metrics, and interact with it. ChatBridge supports RAG by retrieving relevant document context to augment chatbot responses.
+
+## Demo

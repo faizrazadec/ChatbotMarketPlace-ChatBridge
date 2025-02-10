@@ -139,25 +139,25 @@ def process_document(directory_path):
     Args:
         directory_path (str): Path to the directory containing documents.
     """
-    path_components = directory_path.split("/")
-    if path_components:
-        logger.critical("path_components")
+    # path_components = directory_path.split("/")
+    # if path_components:
+    #     logger.critical("path_components")
 
-    username = path_components[1]
-    if username:
-        logger.critical("username: %s", username)
+    # username = path_components[1]
+    # if username:
+    #     logger.critical("username: %s", username)
 
-    extracted_mail = get_email_for_username(username)
-    if extracted_mail:
-        logger.critical("extracted_mail: %s", extracted_mail)
-    logger.error(f"{sender_email, sender_password}")
-    try:
-        send_email_bot_completion(
-            sender_email, sender_password, extracted_mail, subject, body
-        )
-        logger.critical("Email Sended")
-    except Exception as e:
-        logger.error("%s", e)
+    # extracted_mail = get_email_for_username(username)
+    # if extracted_mail:
+    #     logger.critical("extracted_mail: %s", extracted_mail)
+    # # logger.error(f"{sender_email, sender_password}")
+    # try:
+    #     send_email_bot_completion(
+    #         sender_email, sender_password, extracted_mail, subject, body
+    #     )
+    #     logger.critical("Email Sended")
+    # except Exception as e:
+    #     logger.error("%s", e)
 
     # List all files in the directory
     if not os.path.isdir(directory_path):
@@ -188,6 +188,26 @@ def process_document(directory_path):
                 store_embeddings_in_chroma(
                     pages, embeddings_list, collection_name, persist_directory
                 )
+                path_components = directory_path.split("/")
+                if path_components:
+                    logger.critical("path_components")
+
+                username = path_components[1]
+                if username:
+                    logger.critical("username: %s", username)
+
+                extracted_mail = get_email_for_username(username)
+                if extracted_mail:
+                    logger.critical("extracted_mail: %s", extracted_mail)
+                # logger.error(f"{sender_email, sender_password}")
+                try:
+                    send_email_bot_completion(
+                        sender_email, sender_password, extracted_mail, subject, body
+                    )
+                    logger.critical("Email Sended")
+                except Exception as e:
+                    logger.error("%s", e)
+
             else:
                 print(f"Failed to generate embeddings for file: {file_name}")
         else:
