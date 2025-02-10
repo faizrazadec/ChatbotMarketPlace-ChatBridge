@@ -1,0 +1,11 @@
+ffmpeg_python==0.2.0
+langchain==0.3.18
+langchain_chroma==0.2.1
+langchain_core==0.3.34
+langchain_google_genai==2.0.9
+langchain_redis==0.1.2
+langchain_unstructured==0.1.6
+python-dotenv==1.0.1
+regex==2024.11.6
+streamlit==1.41.1
+yagmail==0.15.293
