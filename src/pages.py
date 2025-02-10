@@ -1,4 +1,10 @@
-# pages.py
+"""
+pages.py
+
+This module defines the Streamlit-based user interface for the ChatBridge AI chatbot platform.  
+It provides authentication, chatbot management, chat interactions, and account settings.
+"""
+
 import streamlit as st
 from database import get_connection
 from auth import create_user, verify_user, delete_user_account
@@ -14,6 +20,7 @@ logger = setup_logger()
 
 
 def login_page():
+    """Renders the login/signup page for users."""
     logger.info("Function login_page.")
     st.title("TOPdesk AI Bot Login")
 

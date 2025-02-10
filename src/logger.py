@@ -1,3 +1,18 @@
+"""
+Custom logging module with colorized output.
+
+This module provides a logger with ANSI color formatting for different log levels.
+It defines a `ColorFormatter` to apply colors and a `setup_logger` function to
+initialize logging with colorized output.
+
+Log Levels and Colors:
+    - DEBUG: Cyan
+    - INFO: Green
+    - WARNING: Yellow
+    - ERROR: Red
+    - CRITICAL: Magenta
+"""
+
 import logging
 
 # ANSI escape codes for colors
@@ -14,18 +29,16 @@ COLOR_MAP = {
 # Custom log formatter function
 class ColorFormatter(logging.Formatter):
     """
-    Custom log formatter that adds color to log messages based on their severity level.
+    Custom log formatter that adds color to log messages based on severity level.
 
-    This class inherits from the `logging.Formatter` class and overrides the `format` method
-    to add ANSI escape codes for color formatting to the log messages. The color of the log
-    message is determined by the severity level of the log (e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    This class extends `logging.Formatter` and overrides `format` to insert ANSI
+    escape codes for colored log output. The colors are mapped as follows:
 
-    Colors are applied as follows:
-        - DEBUG: Cyan
-        - INFO: Green
-        - WARNING: Yellow
-        - ERROR: Red
-        - CRITICAL: Magenta
+    - DEBUG: Cyan
+    - INFO: Green
+    - WARNING: Yellow
+    - ERROR: Red
+    - CRITICAL: Magenta
 
     Example:
         log_message = ColorFormatter().format(record)
@@ -42,16 +55,9 @@ def setup_logger():
     """
     Configures the logger with colorized output and a custom log format.
 
-    This function sets up the logging configuration to display log messages with different colors
-    based on their severity level. It also sets the default log level to `INFO` and defines a
-    custom format for log messages. The log messages are displayed on the console with a
-    colored output using ANSI escape codes.
-
-    Steps:
-        1. Set the log level to `INFO`.
-        2. Set the log message format to show the log level and message.
-        3. Add a `StreamHandler` to print log messages to the console.
-        4. Apply a `ColorFormatter` to the log handler to colorize the log messages.
+    This function sets up the logging configuration to display log messages with
+    different colors based on their severity level. The log level is set to `INFO`,
+    and a `StreamHandler` is used to print messages to the console.
 
     Returns:
         logger: The configured logger instance.

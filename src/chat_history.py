@@ -1,4 +1,10 @@
+"""
 # chat_history.py
+Chat History Management Module
+
+This module handles the retrieval and storage of chatbot conversations.
+"""
+
 from datetime import datetime
 
 from database import get_connection
@@ -10,7 +16,7 @@ logger = setup_logger()
 
 def get_chat_history(bot_id):
     """Retrieve conversation history for a chatbot"""
-    logger.info(f"Fetching chat history for bot {bot_id}")
+    logger.info("Fetching chat history for bot %s", bot_id)
     conn = get_connection()
     c = conn.cursor()
 
@@ -23,10 +29,10 @@ def get_chat_history(bot_id):
             (bot_id,),
         )
         history = [{"role": row[0], "content": row[1]} for row in c.fetchall()]
-        logger.debug(f"Found {len(history)} messages in history")
+        logger.debug("Found %s messages in history", len(history))
         return history
     except Exception as e:
-        logger.error(f"Failed to fetch chat history: {str(e)}")
+        logger.error("Failed to fetch chat history: %s", str(e))
         return []
     finally:
         conn.close()
@@ -34,7 +40,7 @@ def get_chat_history(bot_id):
 
 def save_message(bot_id, role, content):
     """Store a message in chat history"""
-    logger.debug(f"Saving {role} message for bot {bot_id}")
+    logger.debug("Saving %s message for bot %s", role, bot_id)
     conn = get_connection()
     c = conn.cursor()
 
@@ -48,7 +54,7 @@ def save_message(bot_id, role, content):
         conn.commit()
         return True
     except Exception as e:
-        logger.error(f"Failed to save message: {str(e)}")
+        logger.error("Failed to save message: %s", str(e))
         return False
     finally:
         conn.close()

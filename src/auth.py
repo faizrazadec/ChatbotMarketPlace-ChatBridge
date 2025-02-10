@@ -1,4 +1,11 @@
+"""
 # auth.py
+Authentication module for user management.
+
+This module provides functions for user authentication, including user 
+registration, login verification, and account deletion.
+"""
+
 import sqlite3
 import hashlib
 import shutil
@@ -13,10 +20,20 @@ logger = setup_logger()
 
 
 def create_user(username: str, email: str, password: str) -> bool:
-    """Create new user with email validation"""
-    logger.info(f"Attempting to create user: {username}")
+    """
+    Create a new user with email validation.
+
+    Args:
+        username (str): The chosen username.
+        email (str): The user's email address.
+        password (str): The user's password (hashed before storage).
+
+    Returns:
+        bool: True if the user is successfully created, False otherwise.
+    """
+    logger.info("Attempting to create user: %s", username)
     if not validate_email(email):
-        logger.warning(f"Invalid email format: {email}")
+        logger.warning("Invalid email format: %s ", email)
         raise ValueError("Invalid email format")
 
     conn = get_connection()
@@ -28,22 +45,31 @@ def create_user(username: str, email: str, password: str) -> bool:
             "INSERT INTO users VALUES (?,?,?)", (username, email.lower(), hashed_pw)
         )
         conn.commit()
-        logger.info(f"User created successfully: {username}")
+        logger.info("User created successfully: %s", username)
         return True
     except sqlite3.IntegrityError as e:
-        logger.error(f"User creation failed: {str(e)}")
+        logger.error("User creation failed: %s", str(e))
         if "UNIQUE constraint failed: users.email" in str(e):
-            raise ValueError("Email already registered")
-        elif "UNIQUE constraint failed: users.username" in str(e):
-            raise ValueError("Username already exists")
+            raise ValueError("Email already registered") from e
+        if "UNIQUE constraint failed: users.username" in str(e):
+            raise ValueError("Username already exists") from e
         raise
     finally:
         conn.close()
 
 
 def verify_user(identifier: str, password: str) -> bool:
-    """Verify user by username or email"""
-    logger.info(f"Verifying user: {identifier}")
+    """
+    Verify a user by username or email.
+
+    Args:
+        identifier (str): The username or email.
+        password (str): The user's password.
+
+    Returns:
+        bool: True if credentials are correct, False otherwise.
+    """
+    logger.info("Verifying user: %s", identifier)
     conn = get_connection()
     c = conn.cursor()
     hashed_pw = hashlib.sha256(password.encode()).hexdigest()
@@ -57,15 +83,27 @@ def verify_user(identifier: str, password: str) -> bool:
         )
         result = c.fetchone()
         return result is not None
-    except Exception as e:
-        logger.error(f"Verification failed: {str(e)}")
+    except sqlite3.DatabaseError as e:
+        logger.error("Verification failed: %s", str(e))
         return False
     finally:
         conn.close()
 
 
 def delete_user_account(username):
-    logger.critical(f"Deleting {username} account...")
+    """
+    Delete a user account and all related data.
+
+    This function removes the user from the database, deletes their associated chatbots 
+    and chat history, and removes their user directory.
+
+    Args:
+        username (str): The username of the account to delete.
+
+    Returns:
+        bool: True if deletion is successful, False otherwise.
+    """
+    logger.critical("Deleting account %s", username)
     conn = get_connection()
     c = conn.cursor()
 
@@ -87,9 +125,13 @@ def delete_user_account(username):
             shutil.rmtree(user_dir)
 
         return True
-    except Exception as e:
-        st.error(f"Error deleting account: {str(e)}")
-        logger.error(f"Error deleting account: {str(e)}")
+    except sqlite3.DatabaseError as e:
+        st.error(f"Database error while deleting account: {str(e)}")
+        logger.error("Database error while deleting account: %s", str(e))
+        return False
+    except OSError as e:
+        st.error(f"File system error while deleting account: {str(e)}")
+        logger.error("File system error while deleting account: %s", str(e))
         return False
     finally:
         conn.close()

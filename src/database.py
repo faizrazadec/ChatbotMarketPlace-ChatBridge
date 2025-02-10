@@ -1,4 +1,11 @@
-# database.py
+"""
+#database.py
+Database module for managing user authentication, chatbots, and chat history.
+
+This module initializes an SQLite database and provides utility functions 
+for connecting, validating emails, and setting up necessary tables.
+"""
+
 import sqlite3
 import os
 import regex as re
@@ -17,12 +24,14 @@ def validate_email(email: str) -> bool:
 
 
 def get_connection():
-    logger.info(f"Connecting to the {DB_PATH}...")
+    """Establish a connection to the SQLite database with foreign key support."""
+    logger.info("Connecting to the %s", DB_PATH)
     return sqlite3.connect(DB_PATH)
 
 
 def init_db():
-    logger.info(f"Initializing {DB_PATH}...")
+    """Initialize the SQLite database with required tables."""
+    logger.info("Initializing %s", DB_PATH)
     conn = get_connection()
     c = conn.cursor()
     # Create users table
@@ -71,5 +80,6 @@ def init_db():
 
 
 def init_file_storage():
+    """Create a directory for user document storage if it doesn't exist."""
     if not os.path.exists("user_docs"):
         os.makedirs("user_docs")

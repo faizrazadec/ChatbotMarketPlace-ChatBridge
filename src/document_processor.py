@@ -1,4 +1,9 @@
+"""
 # document_processor.py
+This module processes documents, generates embeddings using Google Generative AI,
+and stores them in a Chroma vector database. It also integrates email notifications.
+"""
+
 import os
 from uuid import uuid4
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
@@ -31,9 +36,18 @@ embeddings = GoogleGenerativeAIEmbeddings(
     task_type="retrieval_document",  # Adjust if necessary for your use case
 )
 
-
 # Function to load the document and chunk it
 def load_document(file_path, chunk_size=10000):
+    """
+    Loads and chunks a document using UnstructuredLoader.
+
+    Args:
+        file_path (str): Path to the document.
+        chunk_size (int): Maximum character size per chunk.
+
+    Returns:
+        list: List of LangChain Document objects.
+    """
     try:
         # Initialize the UnstructuredLoader with lazy loading
         loader = UnstructuredLoader(
@@ -55,9 +69,17 @@ def load_document(file_path, chunk_size=10000):
         print(f"Error loading document {file_path}: {e}")
         return None
 
-
 # Function to generate embeddings using Google Embeddings
 def generate_embeddings(pages):
+    """
+    Generates embeddings for a list of documents.
+
+    Args:
+        pages (list): List of LangChain Document objects.
+
+    Returns:
+        list: List of embedding vectors.
+    """
     try:
         # Extract text content for embedding generation
         page_texts = [
@@ -77,6 +99,15 @@ def generate_embeddings(pages):
 def store_embeddings_in_chroma(
     pages, embeddings_list, collection_name, persist_directory
 ):
+    """
+    Stores embeddings into a Chroma vector database.
+
+    Args:
+        pages (list): List of langchain.schema.Document objects.
+        embeddings_list (list): Generated embeddings.
+        collection_name (str): Name of the Chroma collection.
+        persist_directory (str): Directory to store the Chroma database.
+    """
     try:
         # Initialize Chroma vector store
         vector_store = Chroma(
@@ -96,20 +127,29 @@ def store_embeddings_in_chroma(
     except Exception as e:
         print(f"Error storing embeddings in Chroma: {e}")
 
-
 # Main function to process all files in a directory
 def process_document(directory_path):
+    """
+    Processes all files in a given directory:
+    - Extracts text
+    - Generates embeddings
+    - Stores embeddings in Chroma DB
+    - Sends an email notification
+
+    Args:
+        directory_path (str): Path to the directory containing documents.
+    """
     path_components = directory_path.split("/")
     if path_components:
         logger.critical("path_components")
 
     username = path_components[1]
     if username:
-        logger.critical(f"username: {username}")
+        logger.critical("username: %s", username)
 
     extracted_mail = get_email_for_username(username)
     if extracted_mail:
-        logger.critical(f"extracted_mail: {extracted_mail}")
+        logger.critical("extracted_mail: %s", extracted_mail)
     logger.error(f"{sender_email, sender_password}")
     try:
         send_email_bot_completion(
@@ -117,7 +157,7 @@ def process_document(directory_path):
         )
         logger.critical("Email Sended")
     except Exception as e:
-        logger.error(f"{e}")
+        logger.error("%s", e)
 
     # List all files in the directory
     if not os.path.isdir(directory_path):
@@ -143,7 +183,7 @@ def process_document(directory_path):
             if embeddings_list:
                 # Create a unique collection name for each file
                 collection_name = f"{os.path.splitext(file_name)[0]}_collection"
-                logger.critical(f"Collection Name: {collection_name}")
+                logger.critical("Collection Name: %s", collection_name)
                 persist_directory = os.path.join(directory_path, "Chroma_db")
                 store_embeddings_in_chroma(
                     pages, embeddings_list, collection_name, persist_directory
@@ -152,9 +192,3 @@ def process_document(directory_path):
                 print(f"Failed to generate embeddings for file: {file_name}")
         else:
             print(f"Failed to load the document: {file_name}")
-
-
-# # Example usage
-# if __name__ == "__main__":
-#     directory_path = "user_docs/dataropes/7"  # Replace with your directory path
-#     process_directory(directory_path)

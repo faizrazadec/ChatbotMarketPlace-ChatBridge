@@ -1,4 +1,11 @@
-# app.py
+"""
+app.py
+
+This is the entry point for the ChatBridge AI chatbot platform.  
+It initializes the database, manages user authentication, and renders the appropriate UI  
+based on the user's login status.
+"""
+
 import streamlit as st
 from database import init_db, init_file_storage
 from pages import login_page, main_app
