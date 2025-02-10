@@ -4,7 +4,7 @@
 
 ## Demo Video 🎥
 
-<video src="[data/Demo_Video.mp4](https://drive.google.com/file/d/1fZN6CdR5oSJ3bji2DC4_3IHk0jXhORID/view?usp=drive_link)" width="352" height="720"></video>
+<video src="https://drive.google.com/file/d/1fZN6CdR5oSJ3bji2DC4_3IHk0jXhORID/view?usp=drive_link" width="352" height="720"></video>
 
 ## Features
 
