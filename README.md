@@ -4,7 +4,7 @@
 
 ## Demo Video 🎥
 
-Watch the Demo [here](https://drive.google.com/file/d/1fZN6CdR5oSJ3bji2DC4_3IHk0jXhORID/view?usp=drive_link).
+Watch the Demo ![here](data/Demo_Video.mp4).
 
 ## Features
 
