@@ -83,6 +83,15 @@ def chatbot_creation_form():
         submitted = st.form_submit_button("Create Chatbot")
 
         if submitted:
+            st.markdown(
+                """
+                <div style="background-color:#d4edda; padding: 20px; border-radius: 8px; border: 1px solid #c3e6cb;">
+                    <h3 style="color:#155724; margin-bottom: 0;">Thank you for using ChatBridge!</h3>
+                    <p style="color:#155724;">Your chatbot will be ready soon. Once created you'll receive an email.</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
             if not data['company_name'] or not data['system_prompt']:
                 st.error("Fields marked with * are required!")
             else:
@@ -92,22 +101,23 @@ def chatbot_creation_form():
                     if 'creating_bot' in st.session_state:
                         del st.session_state.creating_bot
                     st.session_state.bot_created = True
+                    st.rerun()
                     # Show a pop-up message indicating successful creation.
-                    if st.session_state.bot_created:
-                        st.markdown(
-                            """
-                            <div style="background-color:#d4edda; padding: 20px; border-radius: 8px; border: 1px solid #c3e6cb;">
-                                <h3 style="color:#155724; margin-bottom: 0;">Thank you for using ChatBridge!</h3>
-                                <p style="color:#155724;">Your chatbot will be ready soon. Once created you'll receive an email.</p>
-                            </div>
-                            """,
-                            unsafe_allow_html=True
-                        )
-                    if st.form_submit_button("OK"):
-                        st.session_state.bot_created = False  # Reset pop-up state
-                        # Ensure that the current bot is cleared so that the welcome page is shown.
-                        st.session_state.current_bot = None
-                        st.rerun()  # Redirect to the home page
+                    # if st.session_state.bot_created:
+                    #     st.markdown(
+                    #         """
+                    #         <div style="background-color:#d4edda; padding: 20px; border-radius: 8px; border: 1px solid #c3e6cb;">
+                    #             <h3 style="color:#155724; margin-bottom: 0;">Thank you for using ChatBridge!</h3>
+                    #             <p style="color:#155724;">Your chatbot will be ready soon. Once created you'll receive an email.</p>
+                    #         </div>
+                    #         """,
+                    #         unsafe_allow_html=True
+                    #     )
+                    # if st.form_submit_button("OK"):
+                    #     st.session_state.bot_created = False  # Reset pop-up state
+                    #     # Ensure that the current bot is cleared so that the welcome page is shown.
+                    #     st.session_state.current_bot = None
+                    #     st.rerun()  # Redirect to the home page
 
 def main_app():
     logger.info("Function main_app.")
@@ -306,22 +316,26 @@ def main_app():
                 st.metric("Total Interactions", total_interactions)
             
             for message in st.session_state.messages.get(bot_id, []):
-                with st.chat_message(message["role"]):
-                    st.markdown(message["content"])
+                if "role" == 'user':
+                    with st.chat_message(message["role"], avatar='/home/faizraza/Projects/chatbot_market_place/data/9802824.jpg'):
+                        st.markdown(message["content"])
+                else:
+                    with st.chat_message(message["role"]):
+                        st.markdown(message["content"])
             
             if prompt := st.chat_input("Ask about tickets, services, or support..."):
                 # Save the user message locally and in the DB
                 st.session_state.messages[bot_id].append({"role": "user", "content": prompt})
-                with st.chat_message("user"):
+                with st.chat_message("user", avatar='/home/faizraza/Projects/chatbot_market_place/data/9802824.jpg'):
                     st.markdown(prompt)
                 save_message(bot_id, "user", prompt)
-                
+                # print(current_bot)
                 # Extract bot configuration details from the current bot record.
                 bot_name = current_bot[2]
-                company_name = current_bot[3]
-                domain = current_bot[4]
+                company_name = current_bot[4]
+                domain = current_bot[5]
                 industry = current_bot[5]
-                bot_behavior = current_bot[6]
+                bot_behavior = current_bot[7]
                 
                 # Create a session id unique for this conversation
                 session_id = f"{st.session_state.current_user}_{bot_id}"

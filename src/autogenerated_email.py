@@ -10,14 +10,14 @@ sender_password = os.getenv("SENDER_PASSWORD")
 
 subject = "Your Chat bot is ready to play with"
 body = """
-Dear,
-We are pleased to inform you that your chatbot is now ready to be deployed and interacted with. Our team has worked diligently to ensure that your chatbot meets the highest standards of functionality and user experience.
-Your chatbot has been trained on a robust dataset and is equipped with advanced natural language processing capabilities. It is designed to provide accurate and helpful responses to user queries, and its intuitive interface makes it easy to navigate.
-To get started with your chatbot, simply [insert instructions or link to access the chatbot]. If you have any questions or require further assistance, please do not hesitate to contact us.
-We are confident that your chatbot will provide significant value to your users and look forward to receiving your feedback.
-Best regards,
-ChatBridge
-"""
+    Dear,
+    We are pleased to inform you that your chatbot is now ready to be deployed and interacted with. Our team has worked diligently to ensure that your chatbot meets the highest standards of functionality and user experience.
+    Your chatbot has been trained on a robust dataset and is equipped with advanced natural language processing capabilities. It is designed to provide accurate and helpful responses to user queries, and its intuitive interface makes it easy to navigate.
+    To get started with your chatbot, simply [insert instructions or link to access the chatbot]. If you have any questions or require further assistance, please do not hesitate to contact us.
+    We are confident that your chatbot will provide significant value to your users and look forward to receiving your feedback.
+    Best regards,
+    ChatBridge
+    """
 
 # Define the email-sending function using yagmail
 def send_email_bot_completion(sender_email, sender_password, receiver_email, subject, body):
