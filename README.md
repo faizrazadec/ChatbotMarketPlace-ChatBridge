@@ -4,7 +4,7 @@
 
 ## Demo Video 🎥
 
-[![Watch the video](data/Demo Video.mp4)]
+![Watch the video](data/Demo Video.mp4)
 
 ## Features
 
