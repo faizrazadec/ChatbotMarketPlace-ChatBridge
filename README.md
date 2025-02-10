@@ -4,7 +4,7 @@
 
 ## Demo Video 🎥
 
-![Video](/data/Demo Video.mp4)
+![Video](data/Demo Video.mp4)
 
 ## Features
 
