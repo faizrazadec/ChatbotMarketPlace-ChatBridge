@@ -19,17 +19,17 @@ body = """
     ChatBridge
     """
 
+
 # Define the email-sending function using yagmail
-def send_email_bot_completion(sender_email, sender_password, receiver_email, subject, body):
+def send_email_bot_completion(
+    sender_email, sender_password, receiver_email, subject, body
+):
     # Initialize the yagmail client
     yag = yagmail.SMTP(sender_email, sender_password)
 
     # Send the email
-    yag.send(
-        to=receiver_email,
-        subject=subject,
-        contents=body
-    )
+    yag.send(to=receiver_email, subject=subject, contents=body)
+
 
 # (Optional) If your login accepts usernames, you may need a helper function to get the user’s email.
 def get_email_for_username(username):
@@ -42,5 +42,6 @@ def get_email_for_username(username):
     conn.close()
     return result[0] if result else None
 
-dd = get_email_for_username('faizraza')
+
+dd = get_email_for_username("faizraza")
 print(dd)

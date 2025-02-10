@@ -20,11 +20,14 @@ embeddings = GoogleGenerativeAIEmbeddings(
     task_type="retrieval_document",  # Adjust if necessary for your use case
 )
 
+
 # Function to generate embeddings and store them in Chroma
 def generate_embeddings_and_store(pages, vector_store, chunk_size=10000):
     try:
         # Extract text content for embedding generation
-        page_texts = [page.page_content for page in pages]  # Use pages directly since chunking is already done
+        page_texts = [
+            page.page_content for page in pages
+        ]  # Use pages directly since chunking is already done
 
         # Generate embeddings for each page using Google Embeddings
         embeddings_list = embeddings.embed_documents(page_texts)
@@ -33,9 +36,7 @@ def generate_embeddings_and_store(pages, vector_store, chunk_size=10000):
         uuids = [str(uuid4()) for _ in range(len(pages))]
 
         # Prepare the documents as langchain Document objects
-        documents = [
-            Document(page_content=page.page_content) for page in pages
-        ]
+        documents = [Document(page_content=page.page_content) for page in pages]
 
         # Add each embedding to the Chroma collection using add_documents method
         vector_store.add_documents(

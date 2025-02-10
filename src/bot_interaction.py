@@ -5,7 +5,7 @@ from langchain_core.prompts import (
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
-    MessagesPlaceholder
+    MessagesPlaceholder,
 )
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_core.chat_history import BaseChatMessageHistory
@@ -19,22 +19,21 @@ load_dotenv()
 logger = setup_logger()
 
 from langchain.callbacks.tracers import LangChainTracer
+
 langsmith_tracer = LangChainTracer()
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 logger.info(f"Connecting to Redis at: {REDIS_URL}")
 
-gemini_api_key = os.getenv('GEMINI_API_KEY')
-llm = ChatGoogleGenerativeAI(
-    model='gemini-1.5-flash',
-    api_key=gemini_api_key
-)
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", api_key=gemini_api_key)
 
 embeddings = GoogleGenerativeAIEmbeddings(
     model="models/embedding-001",
     google_api_key=os.getenv("GEMINI_API_KEY"),
     task_type="retrieval_document",
 )
+
 
 def get_relevant_documents_from_chroma(user_input: str, bot_name: str, username: str):
     try:
@@ -43,7 +42,11 @@ def get_relevant_documents_from_chroma(user_input: str, bot_name: str, username:
             logger.warning(f"Invalid directory: {directory_path}")
             return [], username
 
-        files = [f for f in os.listdir(directory_path) if os.path.isfile(os.path.join(directory_path, f))]
+        files = [
+            f
+            for f in os.listdir(directory_path)
+            if os.path.isfile(os.path.join(directory_path, f))
+        ]
         if not files:
             logger.warning(f"No files found in: {directory_path}")
             return [], username
@@ -78,7 +81,10 @@ def get_relevant_documents_from_chroma(user_input: str, bot_name: str, username:
         logger.error(f"Error retrieving documents: {e}")
         return [], username
 
-def build_system_prompt(bot_name: str, company_name: str, domain: str, industry: str, bot_behavior: str) -> str:
+
+def build_system_prompt(
+    bot_name: str, company_name: str, domain: str, industry: str, bot_behavior: str
+) -> str:
     return f"""**Company Identity**
     Your name is {bot_name} and You are an AI representative of {company_name}, operating in the {industry} industry with a focus on {domain}. 
 
@@ -102,8 +108,10 @@ def build_system_prompt(bot_name: str, company_name: str, domain: str, industry:
     If asked about topics outside {domain} or {industry}, respond: "I specialize in {domain} for {company_name}. For other inquiries, please visit our website or contact support."
     """
 
+
 def get_redis_history(session_id: str) -> BaseChatMessageHistory:
     return RedisChatMessageHistory(session_id, redis_url=REDIS_URL)
+
 
 def get_bot_response(
     bot_name: str,
@@ -114,22 +122,32 @@ def get_bot_response(
     user_input: str,
     session_id: str,
     bot_id: int,
-    username: str
+    username: str,
 ) -> str:
     try:
         logger.info(f"Processing request for {username} (bot {bot_id})")
 
-        relevant_documents, username = get_relevant_documents_from_chroma(user_input, bot_name, username)
-        context = "\n".join(relevant_documents) if relevant_documents else "No additional context available"
+        relevant_documents, username = get_relevant_documents_from_chroma(
+            user_input, bot_name, username
+        )
+        context = (
+            "\n".join(relevant_documents)
+            if relevant_documents
+            else "No additional context available"
+        )
 
-        system_prompt = build_system_prompt(bot_name, company_name, domain, industry, bot_behavior)
+        system_prompt = build_system_prompt(
+            bot_name, company_name, domain, industry, bot_behavior
+        )
         system_prompt += f"\n\nRelevant Context:\n{context}"
 
-        prompt = ChatPromptTemplate.from_messages([
-            SystemMessagePromptTemplate.from_template(system_prompt),
-            MessagesPlaceholder(variable_name="history"),
-            HumanMessagePromptTemplate.from_template("{input}")
-        ])
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                SystemMessagePromptTemplate.from_template(system_prompt),
+                MessagesPlaceholder(variable_name="history"),
+                HumanMessagePromptTemplate.from_template("{input}"),
+            ]
+        )
 
         chain = prompt | llm | StrOutputParser()
 
@@ -137,12 +155,11 @@ def get_bot_response(
             chain,
             get_redis_history,
             input_messages_key="input",
-            history_messages_key="history"
+            history_messages_key="history",
         )
 
         result = chain_with_history.invoke(
-            {"input": user_input},
-            config={"configurable": {"session_id": session_id}}
+            {"input": user_input}, config={"configurable": {"session_id": session_id}}
         )
 
         logger.info(f"Successfully generated response for {username}")

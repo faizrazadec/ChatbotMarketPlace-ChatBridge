@@ -16,8 +16,8 @@ class ColorFormatter(logging.Formatter):
     """
     Custom log formatter that adds color to log messages based on their severity level.
 
-    This class inherits from the `logging.Formatter` class and overrides the `format` method 
-    to add ANSI escape codes for color formatting to the log messages. The color of the log 
+    This class inherits from the `logging.Formatter` class and overrides the `format` method
+    to add ANSI escape codes for color formatting to the log messages. The color of the log
     message is determined by the severity level of the log (e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL).
 
     Colors are applied as follows:
@@ -30,6 +30,7 @@ class ColorFormatter(logging.Formatter):
     Example:
         log_message = ColorFormatter().format(record)
     """
+
     def format(self, record):
         log_color = COLOR_MAP.get(record.levelname, COLOR_MAP["RESET"])
         log_message = super().format(record)
@@ -41,9 +42,9 @@ def setup_logger():
     """
     Configures the logger with colorized output and a custom log format.
 
-    This function sets up the logging configuration to display log messages with different colors 
-    based on their severity level. It also sets the default log level to `INFO` and defines a 
-    custom format for log messages. The log messages are displayed on the console with a 
+    This function sets up the logging configuration to display log messages with different colors
+    based on their severity level. It also sets the default log level to `INFO` and defines a
+    custom format for log messages. The log messages are displayed on the console with a
     colored output using ANSI escape codes.
 
     Steps:
