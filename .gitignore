@@ -1,1 +1,4 @@
 .env
+**/*.db
+**/user_docs
+**/__pycache__
