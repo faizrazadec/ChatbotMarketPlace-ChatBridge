@@ -87,7 +87,8 @@ chatbridge/
     ```
 
 ## Running the Application
-    ```bash
+
+    ```sh
     streamlit run src/app.py
     ```
 
