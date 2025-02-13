@@ -356,7 +356,7 @@ def main_app():
                 if "role" == "user":
                     with st.chat_message(
                         message["role"],
-                        avatar="/home/faizraza/Projects/chatbot_market_place/data/9802824.jpg",
+                        avatar="/home/faizraza/Projects/ChatbotMarketPlace/data/bot_icon.jpg",
                     ):
                         st.markdown(message["content"])
                 else:
@@ -370,7 +370,7 @@ def main_app():
                 )
                 with st.chat_message(
                     "user",
-                    avatar="/home/faizraza/Projects/chatbot_market_place/data/9802824.jpg",
+                    avatar="/home/faizraza/Projects/ChatbotMarketPlace/data/bot_icon.jpg",
                 ):
                     st.markdown(prompt)
                 save_message(bot_id, "user", prompt)
