@@ -98,3 +98,11 @@ chatbridge/
 
 - **Chat Dashboard:**
     Select a chatbot from the sidebar to view its conversation history, metrics, and interact with it. ChatBridge supports RAG by retrieving relevant document context to augment chatbot responses.
+
+---
+
+### ⭐ **Support This Project!**  
+If you found this useful, **please consider leaving a star ⭐ on GitHub**!  
+It motivates me to keep building more **open-source tools** 🚀  
+
+---
