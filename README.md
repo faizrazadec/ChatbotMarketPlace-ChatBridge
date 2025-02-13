@@ -1,4 +1,4 @@
-# ChatBridge
+# ChatbotMarketPlace-ChatBridge
 
 **ChatBridge** is an AI-powered chatbot creation platform that enables users to easily design, deploy, and manage custom chatbots. With advanced retrieval-augmented generation (RAG) capabilities, document embedding, and seamless website integration via an embed script, ChatBridge provides a comprehensive solution for businesses and developers looking to enhance customer engagement.
 
@@ -50,15 +50,13 @@ chatbridge/
 
 ### Prerequisites
 - **Python 3.8+**
-- **PostgreSQL**
-- **Streamlit**
 
 ### Setup Instructions
 
 1. **Clone the repository**
     ```sh
-   git clone https://github.com/faizrazadec/chatbot_market_place.git
-   cd chatbot_market_place
+   git clone https://github.com/faizrazadec/ChatbotMarketPlace-ChatBridge.git
+   cd ChatbotMarketPlace-ChatBridge
    ```
 
 2. **Create a virtual environment**
