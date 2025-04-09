@@ -49,7 +49,7 @@ chatbridge/
 ## 🔧 Installation
 
 ### Prerequisites
-- **Python 3.8+**
+- **Python 3.12+**
 
 ### Setup Instructions
 
@@ -61,13 +61,12 @@ chatbridge/
 
 2. **Create a virtual environment**
     ```sh
-    python -m venv .venv
-    source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
+    uv venv
     ```
 
 3. **Install dependencies**
     ```sh
-    pip install -r requirements.txt
+    uv pip install -r pyproject.toml
     ```
 
 4. **Set up environment variables**

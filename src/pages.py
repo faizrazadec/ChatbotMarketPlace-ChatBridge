@@ -355,8 +355,7 @@ def main_app():
             for message in st.session_state.messages.get(bot_id, []):
                 if "role" == "user":
                     with st.chat_message(
-                        message["role"],
-                        avatar="/home/faizraza/Projects/ChatbotMarketPlace/data/bot_icon.jpg",
+                        message["role"]
                     ):
                         st.markdown(message["content"])
                 else:
@@ -369,8 +368,7 @@ def main_app():
                     {"role": "user", "content": prompt}
                 )
                 with st.chat_message(
-                    "user",
-                    avatar="/home/faizraza/Projects/ChatbotMarketPlace/data/bot_icon.jpg",
+                    "user"
                 ):
                     st.markdown(prompt)
                 save_message(bot_id, "user", prompt)

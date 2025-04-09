@@ -1,0 +1,8 @@
+**/__pycache__
+.venv
+data
+src/user_docs
+src/ChatBridge.db
+.env.template
+embedding_generator.py
+README.md
